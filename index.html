@@ -1,40 +1,309 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+    <title>JTree</title>
 
-		<link rel="stylesheet" href="dist/reset.css">
-		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css">
+    <link rel="stylesheet" href="dist/reset.css">
+    <link rel="stylesheet" href="dist/reveal.css">
+    <link rel="stylesheet" href="dist/theme/black.css">
 
-		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="plugin/highlight/monokai.css">
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
-		</div>
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="plugin/highlight/monokai.css">
+</head>
+<style>
+    code {
+        font-size: 1em;
+    }
 
-		<script src="dist/reveal.js"></script>
-		<script src="plugin/notes/notes.js"></script>
-		<script src="plugin/markdown/markdown.js"></script>
-		<script src="plugin/highlight/highlight.js"></script>
-		<script>
-			// More info about initialization & config:
-			// - https://revealjs.com/initialization/
-			// - https://revealjs.com/config/
-			Reveal.initialize({
-				hash: true,
+    pre code {
+        background: #222;
+        color: #fff;
+    }
 
-				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
-			});
-		</script>
-	</body>
+    .code-image-vertical {
+        display: flex;
+        flex-direction: column;
+        height: 80vh;
+        min-height: 400px;
+        width: 100%;
+    }
+
+    .code-half {
+        flex: 0 0 auto; /* Use natural height, don't grow or shrink */
+        width: 100%;
+        padding-bottom: 1em;
+        /* No max-height or overflow to avoid scrollbars */
+    }
+
+    .image-half {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 0; /* Allows it to shrink below its content size if needed */
+        overflow: auto; /* This section will get the scrollbar if needed */
+        padding-top: 1em;
+    }
+</style>
+<body>
+<div class="reveal">
+    <div class="slides">
+
+        <section>
+            <h1>JTree: Java Swing Component</h1>
+            <h3>Sukhmeet Khalar</h3>
+            <h3>UMGC - SWEN 661</h3>
+            <h3>May 20th, 2025</h3>
+        </section>
+
+        <section>
+            <h2>Introduction to JTree</h2>
+            <ul>
+                <li><b>JTree</b> is a Swing component for displaying data in a hierarchical, tree-like format.</li>
+                <li>Commonly used in:
+                    <ul>
+                        <li>File explorers (e.g., Windows Explorer, IDE project views)</li>
+                        <li>Organization charts</li>
+                        <li>Category browsers</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Purpose of JTree</h2>
+            <ul>
+                <li><b>Displays hierarchical data</b> where items can have sub-items (nodes and child nodes).</li>
+                <li>Allows users to <b>expand or collapse nodes</b> to show or hide details.</li>
+                <li>Supports <b>single or multiple selection</b> of nodes for further actions.</li>
+                <li>Useful for navigating complex, nested structures.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Common Properties and Methods</h2>
+            <h3>Key Properties</h3>
+            <ul>
+                <li><b>TreeModel:</b> The underlying data structure. Default is <code>DefaultTreeModel</code>.</li>
+                <li><b>Root Node:</b> The top-most node, often a <code>DefaultMutableTreeNode</code>.</li>
+                <li><b>Selection Model:</b> Controls how nodes are selected (single, contiguous, or discontiguous).</li>
+                <li><b>Editable:</b> Allows users to edit node names directly (<code>setEditable(true)</code>).</li>
+                <li><b>Cell Renderer:</b> Customizes how nodes are displayed
+                    (<code>setCellRenderer(TreeCellRenderer)</code>).
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Key Methods</h3>
+            <ul>
+                <li><code>getSelectionPath()</code> / <code>getSelectionPaths()</code>: Returns the selected node(s) as
+                    <code>TreePath</code> objects.
+                </li>
+                <li><code>setSelectionPath(TreePath path)</code>: Selects a specific node.</li>
+                <li><code>expandPath(TreePath path)</code> / <code>collapsePath(TreePath path)</code>: Expands or
+                    collapses a node.
+                </li>
+                <li><code>addTreeSelectionListener(TreeSelectionListener l)</code>: Registers a listener for selection
+                    changes.
+                </li>
+                <li><code>setShowsRootHandles(boolean)</code>: Shows or hides expand/collapse handles for the root node.
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Basic JTree Example</h2>
+            <div class="code-image-vertical">
+                <div class="code-half">
+            <pre><code class="language-java">
+import javax.swing.*;
+import javax.swing.tree.*;
+
+public class SimpleJTreeExample {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("JTree Example");
+
+        // Create the root node and child nodes
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");
+        DefaultMutableTreeNode child1 = new DefaultMutableTreeNode("Child 1");
+        DefaultMutableTreeNode child2 = new DefaultMutableTreeNode("Child 2");
+        DefaultMutableTreeNode grandchild = new DefaultMutableTreeNode("Grandchild 1.1");
+        child1.add(grandchild);
+        root.add(child1);
+        root.add(child2);
+
+        // Create the JTree
+        JTree tree = new JTree(root);
+
+        // Add the tree to a scroll pane and frame
+        frame.add(new JScrollPane(tree));
+        frame.setSize(300, 200);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+    }
+}
+            </code></pre>
+                </div>
+                <div class="image-half">
+                    <img src="./images/1.png" alt="sdfa"/>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Listening for Selection Events</h2>
+            <div class="code-image-vertical">
+                <div class="code-half">
+            <pre><code class="language-java">
+tree.addTreeSelectionListener(e -> {
+    DefaultMutableTreeNode selectedNode =
+        (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+    if (selectedNode != null) {
+        System.out.println("Selected: " + selectedNode.getUserObject());
+    }
+});
+            </code></pre>
+                </div>
+                <div class="image-half">
+                    <img src="./images/2.png" alt=""/>
+                </div>
+            </div>
+        </section>
+
+        <section data-auto-animate>
+            <h2>Expanding and Collapsing Nodes Programmatically</h2>
+            <div class="code-image-vertical">
+                <div class="code-half">
+            <pre><code class="language-java" data-line-numbers="0|36-38|40-41" data-fragment-index="0">
+import javax.swing.*;
+import javax.swing.tree.*;
+
+public class SimpleJTreeExample {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("JTree Example");
+
+        // Create the root node and child nodes
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");
+        DefaultMutableTreeNode child1 = new DefaultMutableTreeNode("Child 1");
+        DefaultMutableTreeNode child2 = new DefaultMutableTreeNode("Child 2");
+        DefaultMutableTreeNode grandchild = new DefaultMutableTreeNode("Grandchild 1.1");
+        child1.add(grandchild);
+        root.add(child1);
+        root.add(child2);
+
+        // Create the JTree
+        JTree tree = new JTree(root);
+
+        // Add the tree to a scroll pane and frame
+        frame.add(new JScrollPane(tree));
+        frame.setSize(300, 200);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+
+
+        tree.addTreeSelectionListener(e -> {
+            DefaultMutableTreeNode selectedNode =
+                    (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+            if (selectedNode != null) {
+                System.out.println("Selected: " + selectedNode.getUserObject());
+            }
+        });
+
+        // Expand the first child node
+        TreePath path = new TreePath(child1.getPath());
+        tree.expandPath(path);
+                
+        // Collapse the child node
+        tree.collapsePath(path)
+    }
+}
+        
+            </code></pre>
+                </div>
+                <div class="fragment current-visible  image-half"
+                     style="position: absolute; top: 14em"
+                     data-fragment-index="0">
+                    <img src="./images/3.png" alt=""/>
+                </div>
+                <div class="fragment current-visible image-half"
+                     style="position: absolute; top: 13em"
+                     data-fragment-index="1">
+                    <img src="./images/4.png" alt=""/>
+                </div>
+            </div>
+        </section>
+        <section>
+            <h2>Customizing Node Icons</h2>
+            <div class="code-image-vertical">
+                <div class="code-half">
+            <pre><code class="language-java">
+DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) tree.getCellRenderer();
+final Icon openIcon = UIManager.getIcon("OptionPane.questionIcon");
+final Icon closeIcon = UIManager.getIcon("OptionPane.errorIcon");
+final Icon leafIcon = UIManager.getIcon("OptionPane.informationIcon");
+renderer.setLeafIcon(leafIcon);
+renderer.setOpenIcon(openIcon);
+renderer.setClosedIcon(closeIcon);
+            </code></pre>
+                </div>
+                <div class="  image-half">
+                <img src="./images/5.png" alt=""/>
+                </div>
+
+            </div>
+        </section>
+
+        <section>
+            <h2>Alternate Uses for JTree</h2>
+            <ul>
+                <li><b>File system browsers:</b> Display folders and files.</li>
+                <li><b>Organization charts:</b> Show company hierarchy.</li>
+                <li><b>Menu navigation:</b> Represent nested menus or categories.</li>
+                <li><b>Custom data:</b> Any nested data structure (e.g., XML, JSON).</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Summary</h2>
+            <ul>
+                <li><b>JTree</b> is ideal for displaying and interacting with hierarchical data.</li>
+                <li>Focus on:
+                    <ul>
+                        <li><b>Nodes</b> (<code>DefaultMutableTreeNode</code>)</li>
+                        <li><b>TreeModel</b></li>
+                        <li><b>Selection and event handling</b></li>
+                        <li><b>Expand/collapse functionality</b></li>
+                    </ul>
+                </li>
+                <li><b>Customizable:</b> Change icons, respond to events, and display any nested data.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Questions?</h2>
+        </section>
+
+    </div>
+</div>
+
+<script src="dist/reveal.js"></script>
+<script src="plugin/notes/notes.js"></script>
+<script src="plugin/markdown/markdown.js"></script>
+<script src="plugin/highlight/highlight.js"></script>
+<script>
+    // More info about initialization & config:
+    // - https://revealjs.com/initialization/
+    // - https://revealjs.com/config/
+    Reveal.initialize({
+        hash: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+    });
+</script>
+</body>
 </html>
