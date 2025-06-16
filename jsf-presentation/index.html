@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/dracula.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h3>JavaServer Faces:<br />setPropertyActionListener</h3>
+					<p>Presented by: <strong>Sukhmeet Khalar</strong><br>
+						Course: <strong>SWEN 661</strong><br>
+						Date: <strong>June 16th, 2025</strong></p>
+				</section>
+
+				<section>
+					<h2>Introduction to JavaServer Faces (JSF)</h2>
+					<ul>
+						<li><strong>JSF</strong> is a Java-based web framework for building user interfaces.</li>
+						<li>Provides reusable UI components and manages their state.</li>
+						<li>Supports event-driven programming similar to desktop apps.</li>
+						<li><strong>setPropertyActionListener</strong> is a built-in tag for handling data flow between UI and backend.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>What is setPropertyActionListener?</h2>
+					<ul>
+						<li><strong>Definition:</strong> <code>&lt;f:setPropertyActionListener&gt;</code> is a JSF tag used to set a value on a managed bean property when a UI action event occurs.</li>
+						<li><strong>Purpose:</strong>
+							<ul>
+								<li>Transfers data from the UI to a bean.</li>
+								<li>Simplifies passing parameters between pages or components.</li>
+							</ul>
+						</li>
+						<li><strong>Works with:</strong> Buttons, links, menu items, or any component that fires an action event.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Why Use setPropertyActionListener?</h2>
+					<ul>
+						<li><strong>Declarative approach:</strong> No need for extra Java code in your beans for simple assignments.</li>
+						<li><strong>Cleaner navigation:</strong> Easily pass parameters between views/pages.</li>
+						<li><strong>Reduces boilerplate:</strong> Avoids writing custom action methods just to set values.</li>
+						<li><strong>Improves maintainability:</strong> Keeps logic in the view layer for simple property assignments.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Basic Syntax and Structure</h2>
+					<pre><code class="xml" data-trim>
+&lt;f:setPropertyActionListener value="..." target="..." /&gt;
+        </code></pre>
+					<ul>
+						<li><strong>value:</strong> The value to assign (Expression Language (EL) expression or literal).</li>
+						<li><strong>target:</strong> The bean property to receive the value (must be an EL expression).</li>
+						<li><strong>Placement:</strong> Nested inside a JSF action component (e.g., <code>&lt;h:commandButton&gt;</code>, <code>&lt;h:commandLink&gt;</code>).</li>
+					</ul>
+				</section>
+				
+
+				<section>
+					<h2>Simple Example</h2>
+					<pre><code class="xml" data-trim>
+&lt;h:commandButton value="Select" action="showDetails"&gt;
+  &lt;f:setPropertyActionListener 
+						value="#{item.id}" 
+						target="#{bean.selectedId}"/&gt;
+&lt;/h:commandButton&gt;
+        </code></pre>
+					<ul>
+						<li>When the button is clicked, <code>item.id</code> is assigned to <code>bean.selectedId</code>.</li>
+						<li>The <code>showDetails</code> action is then triggered.</li>
+						<li><strong>Use case:</strong> Selecting an item from a list and displaying its details.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Common Use Cases</h2>
+					<ul>
+						<li><strong>Passing data between pages:</strong> Selecting a user from a list and showing their profile.</li>
+						<li><strong>Master-detail navigation:</strong> Clicking on a product to view its details.</li>
+						<li><strong>Storing temporary values:</strong> Saving a selected ID or flag before navigation.</li>
+						<li><strong>Simplifying multi-step forms:</strong> Passing values between steps without hidden fields.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>More Advanced Example</h2>
+					<pre><code class="xml" data-trim>
+&lt;h:dataTable value="#{bean.items}" var="item"&gt;
+  &lt;h:column&gt;
+    &lt;h:commandLink value="Edit" action="editItem"&gt;
+      &lt;f:setPropertyActionListener value="#{item}" 
+						target="#{bean.selectedItem}" /&gt;
+    &lt;/h:commandLink&gt;
+  &lt;/h:column&gt;
+&lt;/h:dataTable&gt;
+        </code></pre>
+					<ul>
+						<li>Each row has an "Edit" link.</li>
+						<li>Clicking "Edit" sets <code>bean.selectedItem</code> to the current <code>item</code>.</li>
+						<li>Navigates to the edit page with the selected item ready.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Best Practices and Limitations</h2>
+					<ul>
+						<li><strong>Best Practices:</strong>
+							<ul>
+								<li>Use for simple assignments, not complex logic.</li>
+								<li>Ensure the target property has a public setter.</li>
+								<li>Use with action components only.</li>
+							</ul>
+						</li>
+						<li><strong>Limitations:</strong>
+							<ul>
+								<li>Only works with action events (not value change events).</li>
+								<li>Does not support complex expressions in <code>target</code>.</li>
+								<li>Not suitable for batch assignments or multiple properties at once.</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Alternative Approaches</h2>
+					<ul>
+						<li><strong>Custom Action Methods:</strong> Write a method in the bean to set properties manually. More flexible, but adds boilerplate.</li>
+						<li><strong>View Parameters (<code>&lt;f:viewParam&gt;</code>):</strong> Use for passing parameters via URLs.</li>
+						<li><strong>Flash Scope:</strong> Store values temporarily across redirects.</li>
+					</ul>
+					<p><strong>When to use setPropertyActionListener:</strong> Prefer for simple, one-off assignments during navigation.</p>
+				</section>
+
+				<section>
+					<h2>Summary</h2>
+					<ul>
+						<li><strong>setPropertyActionListener</strong> is a declarative way to assign values to bean properties during JSF action events.</li>
+						<li><strong>Key benefits:</strong>
+							<ul>
+								<li>Simplifies data passing and navigation.</li>
+								<li>Reduces code in managed beans.</li>
+							</ul>
+						</li>
+						<li><strong>Remember:</strong>
+							<ul>
+								<li>Use for simple assignments.</li>
+								<li>Place inside action components.</li>
+								<li>Explore alternatives for more complex scenarios.</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Questions &amp; Discussion</h2>
+					<ul>
+						<li>Any questions about how or when to use setPropertyActionListener?</li>
+					</ul>
+				</section>
+
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
