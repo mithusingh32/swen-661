@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+<!-- Title Slide -->
+      <section>
+        <h2>Understanding</h2>
+		<code>document.querySelector()</code>
+		<br />
+		<br />
+		<h3>Sukhmeet Khalar</h3>
+            <h3>UMGC - SWEN 661</h3>
+            <h3>May 20th, 2025</h3>
+      </section>
+
+      <!-- Introduction -->
+      <section>
+        <h3>Introduction</h3>
+        <ul>
+          <li>HTML5 and JavaScript are essential for building modern user interfaces.</li>
+          <li>Today, we'll explore <code>document.querySelector()</code>—a powerful tool for selecting elements in the DOM.</li>
+          <li>We'll cover its purpose, usage, common patterns, and practical examples.</li>
+        </ul>
+      </section>
+
+      <!-- Purpose -->
+      <section>
+        <h3>What is <code>document.querySelector()</code>?</h3>
+        <ul>
+          <li>A JavaScript method for selecting the <strong>first</strong> element that matches a CSS selector.</li>
+          <li>Lets you interact with HTML elements dynamically.</li>
+          <li>Works with any valid CSS selector (class, id, tag, attribute, etc.).</li>
+        </ul>
+        <pre><code class="language-javascript">const element = document.querySelector('div.my-class');</code></pre>
+      </section>
+
+      <!-- Why Use It? -->
+      <section>
+        <h3>Why Use <code>querySelector()</code>?</h3>
+        <ul>
+          <li>Simple, flexible way to find elements on the page.</li>
+          <li>Replaces older methods like <code>getElementById()</code> and <code>getElementsByClassName()</code> for many use cases.</li>
+          <li>Supports complex CSS selectors for precise targeting.</li>
+        </ul>
+      </section>
+
+      <!-- Syntax -->
+      <section>
+        <h3>Syntax Overview</h3>
+        <pre><code class="language-javascript">document.querySelector(selector);</code></pre>
+        <ul>
+          <li><strong>selector</strong>: A string containing one or more CSS selectors.</li>
+          <li>Returns the <strong>first</strong> matching element, or <code>null</code> if none found.</li>
+        </ul>
+      </section>
+
+      <!-- Common Selectors -->
+      <section>
+        <h3>Common Selectors</h3>
+        <ul>
+          <li><code>'#id'</code> — Select by ID</li>
+          <li><code>'.class'</code> — Select by class</li>
+          <li><code>'tag'</code> — Select by tag name</li>
+          <li><code>'[attribute=value]'</code> — Select by attribute</li>
+          <li><code>'parent child'</code> — Select descendant</li>
+        </ul>
+        <pre><code class="language-javascript">document.querySelector('#main');
+document.querySelector('.active');
+document.querySelector('input[type="text"]');</code></pre>
+      </section>
+
+      <!-- Example 1: Select by ID -->
+      <section>
+        <h3>Example: Select by ID</h3>
+        <pre><code class="language-html">&lt;div id="header"&gt;Welcome!&lt;/div&gt;</code></pre>
+        <pre><code class="language-javascript">const header = document.querySelector('#header');
+header.style.color = 'blue';</code></pre>
+        <ul>
+          <li>Selects the element with ID <code>header</code> and changes its text color.</li>
+        </ul>
+      </section>
+
+      <!-- Example 2: Select by Class -->
+      <section>
+        <h3>Example: Select by Class</h3>
+        <pre><code class="language-html">&lt;button class="submit"&gt;Submit&lt;/button&gt;</code></pre>
+        <pre><code class="language-javascript">const btn = document.querySelector('.submit');
+btn.disabled = true;</code></pre>
+        <ul>
+          <li>Disables the first button with class <code>submit</code>.</li>
+        </ul>
+      </section>
+
+      <!-- Example 3: Complex Selector -->
+      <section>
+        <h3>Example: Complex Selector</h3>
+        <pre><code class="language-html">
+&lt;ul&gt;
+  &lt;li class="item"&gt;Apple&lt;/li&gt;
+  &lt;li class="item"&gt;Banana&lt;/li&gt;
+&lt;/ul&gt;
+        </code></pre>
+        <pre><code class="language-javascript">const firstItem = document.querySelector('ul .item');
+firstItem.textContent = 'Orange';</code></pre>
+        <ul>
+          <li>Finds the first <code>.item</code> inside a <code>ul</code> and changes its text.</li>
+        </ul>
+      </section>
+
+      <!-- Example 4: Attribute Selector -->
+      <section>
+        <h3>Example: Attribute Selector</h3>
+        <pre><code class="language-html">&lt;input type="email" name="userEmail"&gt;</code></pre>
+        <pre><code class="language-javascript">const emailInput = document.querySelector('input[type="email"]');
+emailInput.placeholder = 'Enter your email';</code></pre>
+        <ul>
+          <li>Selects the email input and sets a placeholder.</li>
+        </ul>
+      </section>
+
+      <!-- Alternate Uses -->
+      <section>
+        <h3>Alternate Uses & Tips</h3>
+        <ul>
+          <li>Can be used to select elements for event listeners:</li>
+        </ul>
+        <pre><code class="language-javascript">
+const link = document.querySelector('a.help');
+link.addEventListener('click', function(event) {
+  alert('Help clicked!');
+});
+        </code></pre>
+        <ul>
+          <li>Use <code>document.querySelectorAll()</code> to select <strong>all</strong> matching elements (returns a NodeList).</li>
+        </ul>
+      </section>
+
+      <!-- Limitations & Best Practices -->
+      <section>
+        <h3>Limitations & Best Practices</h3>
+        <ul>
+          <li>Returns only the <strong>first</strong> match—use <code>querySelectorAll()</code> for multiple elements.</li>
+          <li>If no match is found, returns <code>null</code>—always check before using the result.</li>
+          <li>Keep selectors specific but not overly complex for readability and performance.</li>
+        </ul>
+      </section>
+
+      <!-- Summary -->
+      <section>
+        <h3>Summary</h3>
+        <ul>
+          <li><code>document.querySelector()</code> is a versatile, modern way to select DOM elements.</li>
+          <li>Supports all CSS selectors for powerful, flexible queries.</li>
+          <li>Ideal for dynamic UI manipulation and event handling.</li>
+        </ul>
+        <p><strong>Practice using it in your projects!</strong></p>
+      </section>
+
+      <!-- Resources -->
+      <section>
+        <h3>Further Resources</h3>
+        <ul>
+          <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector">MDN: document.querySelector()</a></li>
+          <li><a href="https://www.w3schools.com/jsref/met_document_queryselector.asp">W3Schools: querySelector()</a></li>
+          <li><a href="https://css-tricks.com/using-queryselector-to-select-elements/">CSS-Tricks: Using querySelector</a></li>
+        </ul>
+      </section>
+
+      <!-- Questions -->
+      <section>
+        <h3>Questions?</h3>
+        <p>Thank you for your attention!</p>
+        <p>Feel free to ask any questions or request further examples.</p>
+      </section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
